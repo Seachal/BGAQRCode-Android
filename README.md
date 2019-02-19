@@ -19,6 +19,9 @@
 - [x] 可定制要识别的码的格式（详细用法查看 TestScanActivity 中的 onClick 方法）
 - [x] 可以控制闪光灯，方便夜间使用
 - [x] 可以设置用前置摄像头扫描
+- [x] 可以二指缩放预览
+- [x] 可以监听环境亮度，提示用户打开、关闭闪光灯
+- [x] 识别到比较小的码时自动放大
 ***
 - [x] ZXing 生成可自定义颜色、带 logo 的二维码
 - [x] ZXing 生成一维码
@@ -51,7 +54,7 @@
 
 | [点击下载 ZXingDemo.apk](http://fir.im/ZXingDemo)或扫描下面的二维码安装 | [点击下载 ZBarDemo.apk](http://fir.im/ZBarDemo)或扫描下面的二维码安装 |
 | :------------: | :------------: |
-| ![ZXingDemo apk文件二维码](http://7xk9dj.com1.z0.glb.clouddn.com/qrcode/zxingdemoapk.png) | ![ZBarDemo apk文件二维码](http://7xk9dj.com1.z0.glb.clouddn.com/qrcode/zbardemoapk.png) |
+| ![ZXingDemo apk文件二维码](http://bgashare.bingoogolapple.cn/qrcode/zxingdemoapk.png) | ![ZBarDemo apk文件二维码](http://bgashare.bingoogolapple.cn/qrcode/zbardemoapk.png) |
 
 ## Gradle 依赖
 [ ![Download](https://api.bintray.com/packages/bingoogolapple/maven/bga-qrcode-core/images/download.svg) ](https://bintray.com/bingoogolapple/maven/bga-qrcode-core/_latestVersion)「latestVersion」指的是左边这个 Download 徽章后面的「数字」，请自行替换。***请不要再来问我「latestVersion」是什么了***
@@ -145,6 +148,7 @@ qrcv_isShowDefaultGridScanLineDrawable         | 是否显示默认的网格图�
 qrcv_customGridScanLineDrawable         | 扫描线的网格图片资源        | nulll
 qrcv_isOnlyDecodeScanBoxArea         | 是否只识别扫描框中的码        | false
 qrcv_isShowLocationPoint         | 是否显示定位点        | false
+qrcv_isAutoZoom         | 码太小时是否自动缩放        | false
 
 ## 接口说明
 
@@ -203,16 +207,9 @@ public void startCamera(int cameraFacing)
 public void stopCamera()
 
 /**
- * 延迟0.5秒后开始识别
+ * 开始识别
  */
 public void startSpot()
-
-/**
- * 延迟delay毫秒后开始识别
- *
- * @param delay
- */
-public void startSpotDelay(int delay)
 
 /**
  * 停止识别
@@ -225,7 +222,7 @@ public void stopSpot()
 public void stopSpotAndHiddenRect()
 
 /**
- * 显示扫描框，并且延迟0.5秒后开始识别
+ * 显示扫描框，并开始识别
  */
 public void startSpotAndShowRect()
 
@@ -263,6 +260,13 @@ public void decodeQRCode(Bitmap bitmap)
  * @param result 摄像头扫码时只要回调了该方法 result 就一定有值，不会为 null。解析本地图片或 Bitmap 时 result 可能为 null
  */
 void onScanQRCodeSuccess(String result)
+
+/**
+ * 摄像头环境亮度发生变化
+ *
+ * @param isDark 是否变暗
+ */
+void onCameraAmbientBrightnessChanged(boolean isDark);
 
 /**
  * 处理打开相机出错
@@ -330,7 +334,7 @@ public static Bitmap syncEncodeBarcode(String content, int width, int height, in
 
 | 个人主页 | 邮箱 | BGA系列开源库QQ群
 | ------------- | ------------ | ------------ |
-| <a  href="http://www.bingoogolapple.cn" target="_blank">bingoogolapple.cn</a>  | <a href="mailto:bingoogolapple@gmail.com" target="_blank">bingoogolapple@gmail.com</a> | ![BGA_CODE_CLUB](http://7xk9dj.com1.z0.glb.clouddn.com/BGA_CODE_CLUB.png?imageView2/2/w/200) |
+| <a  href="http://www.bingoogolapple.cn" target="_blank">bingoogolapple.cn</a>  | <a href="mailto:bingoogolapple@gmail.com" target="_blank">bingoogolapple@gmail.com</a> | ![BGA_CODE_CLUB](http://bgashare.bingoogolapple.cn/BGA_CODE_CLUB.png?imageView2/2/w/200) |
 
 ## 打赏支持
 
@@ -339,5 +343,22 @@ public static Bitmap syncEncodeBarcode(String content, int width, int height, in
 如果您目前正打算购买通往墙外的梯子，可以使用我的邀请码「YFQ9Q3B」购买 [Lantern](https://github.com/getlantern/forum)，双方都赠送三个月的专业版使用时间:beers:
 
 <p align="center">
-  <img src="http://7xk9dj.com1.z0.glb.clouddn.com/bga_pay.png" width="450">
+  <img src="http://bgashare.bingoogolapple.cn/bga_pay.png?imageView2/2/w/450" width="450">
 </p>
+
+## License
+
+    Copyright (C) 2012 The Android Open Source Project
+    Copyright 2014 bingoogolapple
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
